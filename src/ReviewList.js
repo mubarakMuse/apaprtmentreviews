@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Card } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { useNavigate } from 'react-router-dom';
 import ReviewItem from './ReviewItem';
 import apartments from './apartments';
 
@@ -10,7 +9,6 @@ function ReviewList() {
   const [reviews, setReviews] = useState([]);
   const [selectedApartment, setSelectedApartment] = useState('');
   const [filteredReviews, setFilteredReviews] = useState([]);
-  const navigate = useNavigate(); // React Router's navigate function
   const airtableAPIKey = process.env.REACT_APP_AIRTABLE_API_KEY;
   const airtableBaseId = process.env.REACT_APP_AIRTABLE_BASE_ID;
 
@@ -29,7 +27,7 @@ function ReviewList() {
       .catch((error) => {
         console.error('Error fetching reviews:', error);
       });
-  }, []);
+  }, );
 
   useEffect(() => {
     if (selectedApartment) {
