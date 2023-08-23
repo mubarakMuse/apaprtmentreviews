@@ -20,4 +20,24 @@
   .text-center {
     text-align: center;
   }
-  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .spin-image {
+    animation: spin 100s linear infinite;
+  }
+  /* HomePage.css */
+.custom-container {
+  min-height: 80vh;
+}
+
+.custom-logo {
+  font-family: 'Your Custom Font', sans-serif;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
