@@ -13,21 +13,19 @@ function ReviewList() {
   const airtableBaseId = process.env.REACT_APP_AIRTABLE_BASE_ID;
 
   const url = `https://api.airtable.com/v0/${airtableBaseId}/Reviews`;
-  const headers = {
-    Authorization: `Bearer ${airtableAPIKey}`,
-  };
+
 
   useEffect(() => {
     axios
-      .get(url, { headers })
-      .then((response) => {
+    .get(url, { headers: { Authorization: `Bearer ${airtableAPIKey}` } })
+    .then((response) => {
         const fetchedReviews = response.data.records.map((record) => record.fields);
         setReviews(fetchedReviews);
       })
       .catch((error) => {
         console.error('Error fetching reviews:', error);
       });
-  }, );
+  }, [url,airtableAPIKey]);
 
   useEffect(() => {
     if (selectedApartment) {
