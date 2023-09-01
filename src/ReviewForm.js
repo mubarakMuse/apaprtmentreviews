@@ -1,15 +1,14 @@
-// ReviewForm.js
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import apartments from './apartments';
 
-
 function ReviewForm() {
   const [apartment, setApartment] = useState('');
+  const [customApartment, setCustomApartment] = useState(''); // New state for custom apartment
   const [reviewText, setReviewText] = useState('');
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState('');
 
   const airtableAPIKey = process.env.REACT_APP_AIRTABLE_API_KEY;
   const airtableBaseId = process.env.REACT_APP_AIRTABLE_BASE_ID;
@@ -19,14 +18,15 @@ function ReviewForm() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
     try {
+      const selectedApartment = customApartment || apartment; // Use custom apartment if provided, otherwise selected apartment
       const response = await axios.post(
         `https://api.airtable.com/v0/${airtableBaseId}/${airtableTable}`,
         {
           fields: {
-            Apartment: apartment,
+            Apartment: selectedApartment,
             Review: reviewText,
             Rating: rating,
           },
@@ -41,9 +41,6 @@ function ReviewForm() {
 
       if (response.status === 200) {
         console.log('Review submitted successfully:', response.data);
-        // Optionally, you can navigate to a success page here
-
-        // Navigate back to the home page
         navigate('/');
       }
     } catch (error) {
@@ -55,7 +52,7 @@ function ReviewForm() {
     <Container>
       <h2 className="mt-4 mb-4">Submit a Review</h2>
       <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Label>Choose Apartment</Form.Label>
           <Form.Control
             as="select"
@@ -72,12 +69,22 @@ function ReviewForm() {
           </Form.Control>
         </Form.Group>
         <Form.Group className="mb-3">
+          <Form.Label>OR Enter Apartment Name [if not listed above]</Form.Label> {/* New input field for custom apartment */}
+          <Form.Control
+            type="text"
+            value={customApartment}
+            onChange={(e) => setCustomApartment(e.target.value)}
+            placeholder="Enter apartment name and (city) in parenthesis"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
           <Form.Label>Write Your Review</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
+            placeholder="Please write your extended and detailed review."
             required // Mark this field as required
           />
         </Form.Group>
@@ -98,7 +105,7 @@ function ReviewForm() {
             <option value={5}>5</option>
           </Form.Control>
         </Form.Group>
-        <Button variant="success" type="submit">
+        <Button variant="primary" type="submit" className="mb-3">
           Submit Review
         </Button>
       </Form>

@@ -6,10 +6,13 @@ function ReviewItem({ review }) {
     <Card className="mt-4 w-75">
       <Card.Body>
         <Card.Text>
-          <strong>Review:</strong> {review.Review}
+          <strong>Review:</strong> {review.fields.Review}
         </Card.Text>
         <Card.Text>
-          <strong>Rating:</strong> {review.Rating} out of 5
+          <strong>Rating:</strong> {review.fields.Rating} out of 5
+        </Card.Text>
+        <Card.Text>
+          <strong>Time:</strong> {new Date(review.createdTime).toLocaleString()}
         </Card.Text>
       </Card.Body>
     </Card>
